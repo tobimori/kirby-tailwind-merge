@@ -74,9 +74,8 @@ Options allow you to fine tune the behaviour of the plugin. You can set them in 
 
 ```php
 return [
-    'tobimori.icon-field' => [
-        'cache' => true,
-        'folder' => 'assets/icon'
+    'tobimori.tailwind-merge' => [
+        'prefix' => 'tw-',
     ],
 ];
 ```
