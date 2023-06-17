@@ -2,7 +2,7 @@
 
 use tobimori\TwMerge;
 
-if (option('tobimori.tailwind-merge.helpers.attr')) {
+if (option('tobimori.tailwind-merge.helpers.attr', true)) {
   /**
    * Generates a list of HTML attributes, and intelligently merges classes with Tailwind merge.
    *
@@ -19,7 +19,7 @@ if (option('tobimori.tailwind-merge.helpers.attr')) {
   }
 }
 
-if (option('tobimori.tailwind-merge.helpers.merge')) {
+if (option('tobimori.tailwind-merge.helpers.merge', true)) {
   /**
    * Outputs the class html attribute and intelligently merges classes with Tailwind merge.
    *

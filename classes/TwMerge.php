@@ -7,7 +7,7 @@ use TailwindMerge\TailwindMerge;
 
 class TwMerge
 {
-  public function __construct()
+  public static function instance()
   {
     return TailwindMerge::factory()->withConfiguration([
       'prefix' => option('tobimori.tailwind-merge.prefix', '')
@@ -21,11 +21,11 @@ class TwMerge
     string|null $after = null
   ): string|null {
     if ($name === 'class') {
-      $value = (new self())->attr($value);
+      $value =  self::instance()->merge($value);
     }
 
     if (is_array($name) && isset($name['class'])) {
-      $name['class'] = (new self())->attr($name['class']);
+      $name['class'] = self::instance()->merge($name['class']);
     }
 
     return Html::attr($name, $value, $before, $after);
