@@ -1,0 +1,43 @@
+{
+  "name": "tobimori/kirby-tailwind-merge",
+  "description": "Tailwind Merge for Kirby CMS",
+  "version": "1.0.0",
+  "type": "kirby-plugin",
+  "keywords": [
+    "kirby",
+    "kirby-plugin"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tobias Möritz",
+      "email": "tobias@moeritz.io",
+      "homepage": "https://moeritz.io"
+    }
+  ],
+  "require": {
+    "php": ">=8.2.0",
+    "getkirby/composer-installer": "^1.2",
+    "gehrisandro/tailwind-merge-php": "^0.0.1"
+  },
+  "require-dev": {
+    "getkirby/cms": "^3.9"
+  },
+  "scripts": {
+    "dist": "composer install --no-dev --optimize-autoloader"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "allow-plugins": {
+      "getkirby/composer-installer": true
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "tobimori\\": "classes/"
+    },
+    "files": [
+      "helpers.php"
+    ]
+  }
+}
