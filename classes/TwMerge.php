@@ -31,8 +31,8 @@ class TwMerge
     return Html::attr($name, $value, $before, $after);
   }
 
-  public static function merge(string|array $classes): string
+  public static function merge(string|array $classes, ...$args): string
   {
-    return self::attr('class', $classes);
+    return self::attr('class', [$classes, ...$args]);
   }
 }

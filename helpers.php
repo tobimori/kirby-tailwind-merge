@@ -4,11 +4,7 @@ use tobimori\TwMerge;
 
 if (option('tobimori.tailwind-merge.helpers.attr', true)) {
   /**
-   * Generates a list of HTML attributes, and intelligently merges classes with Tailwind merge.
-   *
-   * @param array|null $attr A list of attributes as key/value array
-   * @param string|null $before An optional string that will be prepended if the result is not empty
-   * @param string|null $after An optional string that will be appended if the result is not empty
+   * Generates a list of HTML attributes, and intelligently merges classes with Tailwind Merge.
    */
   function attr(
     array|null $attr = null,
@@ -21,11 +17,9 @@ if (option('tobimori.tailwind-merge.helpers.attr', true)) {
 
 if (option('tobimori.tailwind-merge.helpers.merge', true)) {
   /**
-   * Outputs the class html attribute and intelligently merges classes with Tailwind merge.
-   *
-   * @param string|array $classes A list of classes as string or array
+   * Outputs the class html attribute and intelligently merges classes with Tailwind Merge.
    */
-  function merge(string|array $classes): string
+  function merge(...$classes): string
   {
     return TwMerge::merge($classes);
   }
