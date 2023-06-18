@@ -14,6 +14,38 @@ class TwMerge
     ])->make();
   }
 
+  public static function buildClassAttr(string|array $classes): string
+  {
+    if (is_string($classes)) {
+      return $classes;
+    }
+
+    $classList = [];
+
+    foreach ($classes as $class => $condition) {
+      if (is_numeric($class)) {
+        if (is_array($condition)) {
+          $classList[] = self::buildClassAttr($condition);
+        } else {
+          $classList[] = $condition;
+        }
+      } elseif ($condition) {
+        if (is_array($class)) {
+          $classList[] = self::buildClassAttr($class);
+        } else {
+          $classList[] = $class;
+        }
+      }
+    }
+
+    return implode(' ', $classList);
+  }
+
+  public static function cls(string|array $value): string
+  {
+    return self::instance()->merge(self::buildClassAttr($value)) ?? ' ';
+  }
+
   public static function attr(
     string|array $name,
     $value = null,
@@ -21,18 +53,18 @@ class TwMerge
     string|null $after = null
   ): string|null {
     if ($name === 'class') {
-      $value =  self::instance()->merge($value);
+      $value = self::cls($value);
     }
 
     if (is_array($name) && isset($name['class'])) {
-      $name['class'] = self::instance()->merge($name['class']);
+      $name['class'] = self::cls($name['class']);
     }
 
     return Html::attr($name, $value, $before, $after);
   }
 
-  public static function merge(string|array $classes, ...$args): string
+  public static function merge(...$classes): string
   {
-    return self::attr('class', [$classes, ...$args]);
+    return self::attr('class', $classes) ?? ' ';
   }
 }

@@ -9,7 +9,8 @@ App::plugin('tobimori/tailwind-merge', [
     'prefix' => '',
     'helpers' => [
       'attr' => true,
-      'merge' => true
+      'merge' => true,
+      'cls' => true
     ]
   ]
 ]);

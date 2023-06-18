@@ -24,3 +24,13 @@ if (option('tobimori.tailwind-merge.helpers.merge', true)) {
     return TwMerge::merge($classes);
   }
 }
+
+if (option('tobimori.tailwind-merge.helpers.cls', true)) {
+  /**
+   * Outputs the contents of the class html attribute and intelligently merges classes with Tailwind Merge.
+   */
+  function cls(...$classes): string
+  {
+    return TwMerge::cls($classes);
+  }
+}
