@@ -67,4 +67,9 @@ class TwMerge
   {
     return self::attr('class', $classes) ?? ' ';
   }
+
+  public static function modify(string $modifier, string $classes): string
+  {
+    return self::cls($modifier . ':' . implode(" {$modifier}:", explode(' ', $classes)));
+  }
 }

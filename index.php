@@ -6,11 +6,6 @@ use Kirby\Cms\App;
 
 App::plugin('tobimori/tailwind-merge', [
   'options' => [
-    'prefix' => '',
-    'helpers' => [
-      'attr' => true,
-      'merge' => true,
-      'cls' => true
-    ]
+    'prefix' => ''
   ]
 ]);

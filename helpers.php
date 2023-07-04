@@ -2,7 +2,7 @@
 
 use tobimori\TwMerge;
 
-if (option('tobimori.tailwind-merge.helpers.attr', true)) {
+if (!function_exists('attr')) {
   /**
    * Generates a list of HTML attributes, and intelligently merges classes with Tailwind Merge.
    */
@@ -15,7 +15,7 @@ if (option('tobimori.tailwind-merge.helpers.attr', true)) {
   }
 }
 
-if (option('tobimori.tailwind-merge.helpers.merge', true)) {
+if (!function_exists('merge')) {
   /**
    * Outputs the class html attribute and intelligently merges classes with Tailwind Merge.
    */
@@ -25,12 +25,22 @@ if (option('tobimori.tailwind-merge.helpers.merge', true)) {
   }
 }
 
-if (option('tobimori.tailwind-merge.helpers.cls', true)) {
+if (!function_exists('cls')) {
   /**
    * Outputs the contents of the class html attribute and intelligently merges classes with Tailwind Merge.
    */
   function cls(...$classes): string
   {
     return TwMerge::cls($classes);
+  }
+}
+
+if (!function_exists('mod')) {
+  /**
+   * Modifies all classes with the given modifier and intelligently merges classes with Tailwind Merge.
+   */
+  function mod(string $modifier, string $classes): string
+  {
+    return TwMerge::modify($modifier, $classes);
   }
 }

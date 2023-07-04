@@ -42,7 +42,7 @@ define("KIRBY_HELPER_ATTR", false);
 <?php snippet('component', ['class' => 'w-1/2']) ?>
 
 // output
-<div class="h-full bg-neutral-100 w-1/2" data-attr="hello world!">[...]</div>
+<div class="w-1/2 h-full bg-neutral-100" data-attr="hello world!">[...]</div>
 ```
 
 ### `merge()`
@@ -59,7 +59,7 @@ define("KIRBY_HELPER_ATTR", false);
 <?php snippet('component', ['class' => 'w-1/2']) ?>
 
 // output
-<div class="h-full bg-neutral-100 w-1/2">[...]</div>
+<div class="w-1/2 h-full bg-neutral-100">[...]</div>
 ```
 
 ### `cls()`
@@ -81,11 +81,11 @@ define("KIRBY_HELPER_ATTR", false);
 
 // site/templates/home.php
 // output
-<div class="bg-neutral-white py-32 px-16">[...]</div>
+<div class="px-16 py-32 bg-neutral-white">[...]</div>
 
 // site/templates/article.php
 // output
-<div class="bg-neutral-white py-32">[...]</div>
+<div class="py-32 bg-neutral-white">[...]</div>
 ```
 
 ### Conditional merging
@@ -103,14 +103,61 @@ This conditional merge syntax using arrays can be used with the `merge()` and `a
     ]) ?>>[...]</div>
 ```
 
+### `mod($modifier, $classes)`
+
+`mod()` applies the specified modifier/variant to each class supplied in the `$class` string. It also applies Tailwind Merge behaviour and outputs the contents of class attribute. This is useful when you have a bunch of classes and want them all to activate at the same modifier.
+
+#### Example
+
+```php
+<div class="flex mb-4 <?= mod('lg', 'mb-2 flex-col') ?>">[...]</div>
+
+// output
+<div class="flex mb-4 lg:mb-2 lg:flex-col">[...]</div>
+```
+
+#### "But Tailwind won't parse my classes then!"
+
+I hear you, but thankfully Tailwind allows us to customize the parser to our needs. This is not a 100% perfect technique due to being reliant on regexing' the classes, but it works for most cases.
+
+With a custom transformer function to scan for the `mod()` function, your `tailwind.config.js` could look like this:
+
+```js
+module.exports = {
+  content: {
+    files: ["./site/**/*.php", "./src/index.js"],
+    transform: (code) => {
+      const variantGroupsRegex = /mod\(.([^,"']+)[^\[]+["'](.+)["']\)/g
+      const variantGroupMatches = [...code.matchAll(variantGroupsRegex)]
+
+      variantGroupMatches.forEach(([matchStr, variants, classes]) => {
+        const parsedClasses = classes
+          .split(" ")
+          .map((cls) => `${variants}:${cls}`)
+          .join(" ")
+
+        code = code.replaceAll(matchStr, parsedClasses)
+      })
+
+      return code
+    }
+  },
+  theme: {
+    extend: {}
+  },
+  plugins: []
+}
+```
+
+For simplicity in parsing the function with Tailwind, the `mod()` function doesn't support arrays. With this approach, you're also not aple to e.g. use a variable inside the function, but only direct strings.
+
+If you still want to use variables, that e.g. come from the CMS directly, you can add the generated classes to your [`safelist`](https://tailwindcss.com/docs/content-configuration#safelisting-classes) and they'll be generated to matter what.
+
 ## Options
 
-| Option          | Default | Description                            |
-| --------------- | ------- | -------------------------------------- |
-| `prefix`        | ``      | Set a prefix for your tailwind classes |
-| `helpers.attr`  | `true`  | Register the `attr()` helper function  |
-| `helpers.cls`   | `true`  | Register the `cls()` helper function   |
-| `helpers.merge` | `true`  | Register the `merge()` helper function |
+| Option   | Default | Description                            |
+| -------- | ------- | -------------------------------------- |
+| `prefix` | ``      | Set a prefix for your tailwind classes |
 
 Options allow you to fine tune the behaviour of the plugin. You can set them in your `config.php` file:
 
