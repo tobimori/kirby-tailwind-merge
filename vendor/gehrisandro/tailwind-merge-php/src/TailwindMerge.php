@@ -2,7 +2,9 @@
 
 namespace TailwindMerge;
 
+use Psr\SimpleCache\CacheInterface;
 use TailwindMerge\Contracts\TailwindMergeContract;
+use TailwindMerge\Support\Collection;
 use TailwindMerge\Support\Config;
 use TailwindMerge\Support\Str;
 use TailwindMerge\Support\TailwindClassParser;
@@ -28,7 +30,8 @@ class TailwindMerge implements TailwindMergeContract
      * @param  array<string, mixed>  $configuration
      */
     public function __construct(
-        private readonly array $configuration
+        private readonly array $configuration,
+        private readonly ?CacheInterface $cache = null,
     ) {
     }
 
@@ -37,35 +40,37 @@ class TailwindMerge implements TailwindMergeContract
      */
     public function merge(...$args): string
     {
-        $input = collect($args)->flatten()->join(' ');
+        $input = Collection::make($args)->flatten()->join(' ');
 
-        $conflictingClassGroups = [];
+        return $this->withCache($input, function (string $input): string {
+            $conflictingClassGroups = [];
 
-        $parser = new TailwindClassParser($this->configuration);
+            $parser = new TailwindClassParser($this->configuration);
 
-        return Str::of($input)
-            ->trim()
-            ->split('/\s+/')
-            ->map(fn (string $class): ParsedClass => $parser->parse($class)) // @phpstan-ignore-line
-            ->reverse()
-            ->map(function (ParsedClass $class) use (&$conflictingClassGroups): ?string {
-                $classId = $class->modifierId.$class->classGroupId;
+            return Str::of($input)
+                ->trim()
+                ->split('/\s+/')
+                ->map(fn (string $class): ParsedClass => $parser->parse($class)) // @phpstan-ignore-line
+                ->reverse()
+                ->map(function (ParsedClass $class) use (&$conflictingClassGroups): ?string {
+                    $classId = $class->modifierId.$class->classGroupId;
 
-                if (array_key_exists($classId, $conflictingClassGroups)) {
-                    return null;
-                }
+                    if (array_key_exists($classId, $conflictingClassGroups)) {
+                        return null;
+                    }
 
-                $conflictingClassGroups[$classId] = true;
+                    $conflictingClassGroups[$classId] = true;
 
-                foreach (self::getConflictingClassGroupIds($class->classGroupId, $class->hasPostfixModifier) as $group) {
-                    $conflictingClassGroups[$class->modifierId.$group] = true;
-                }
+                    foreach (self::getConflictingClassGroupIds($class->classGroupId, $class->hasPostfixModifier) as $group) {
+                        $conflictingClassGroups[$class->modifierId.$group] = true;
+                    }
 
-                return $class->originalClassName;
-            })
-            ->reverse()
-            ->filter()
-            ->join(' ');
+                    return $class->originalClassName;
+                })
+                ->reverse()
+                ->filter()
+                ->join(' ');
+        });
     }
 
     /**
@@ -80,5 +85,28 @@ class TailwindMerge implements TailwindMergeContract
         }
 
         return $conflicts;
+    }
+
+    private function withCache(string $input, \Closure $callback): string
+    {
+        if ($this->cache === null) {
+            return $callback($input);
+        }
+
+        $key = hash('xxh3', 'tailwind-merge-'.$input);
+
+        if ($this->cache->has($key)) {
+            $cachedValue = $this->cache->get($key);
+
+            if (is_string($cachedValue)) {
+                return $cachedValue;
+            }
+        }
+
+        $mergedClasses = $callback($input);
+
+        $this->cache->set($key, $mergedClasses);
+
+        return $mergedClasses;
     }
 }

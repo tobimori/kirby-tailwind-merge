@@ -2,21 +2,23 @@
 
 namespace TailwindMerge\Support;
 
-use Illuminate\Support\Collection;
+use TailwindMerge\Validators\AnyValueValidator;
+use TailwindMerge\Validators\ArbitraryImageValidator;
+use TailwindMerge\Validators\ArbitraryLengthValidator;
+use TailwindMerge\Validators\ArbitraryNumberValidator;
+use TailwindMerge\Validators\ArbitraryPositionValidator;
+use TailwindMerge\Validators\ArbitraryShadowValidator;
+use TailwindMerge\Validators\ArbitrarySizeValidator;
+use TailwindMerge\Validators\ArbitraryValueValidator;
+use TailwindMerge\Validators\IntegerValidator;
+use TailwindMerge\Validators\LengthValidator;
+use TailwindMerge\Validators\NumberValidator;
+use TailwindMerge\Validators\PercentValidator;
+use TailwindMerge\Validators\TshirtSizeValidator;
 use TailwindMerge\ValueObjects\ThemeGetter;
 
 class Config
 {
-    final const FRACTION_REGEX = '/^\d+\/\d+$/';
-
-    final const LENGTH_UNIT_REGEX = '/\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|^0$/';
-
-    final const ARBITRARY_VALUE_REGEX = '/^\[(?:([a-z-]+):)?(.+)\]$/i';
-
-    final const T_SHIRT_UNIT_REGEX = '/^(\d+(\.\d+)?)?(xs|sm|md|lg|xl)$/';
-
-    final const SHADOW_REGEX = '/^-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)/';
-
     /**
      * @var array<string, mixed>
      */
@@ -113,31 +115,31 @@ class Config
             'cacheSize' => 500,
             'prefix' => null,
             'theme' => [
-                'colors' => [self::isAny(...)],
-                'spacing' => [self::isLength(...)],
-                'blur' => ['none', '', self::isTshirtSize(...), self::isArbitraryLength(...)],
+                'colors' => [AnyValueValidator::validate(...)],
+                'spacing' => [LengthValidator::validate(...), ArbitraryLengthValidator::validate(...)],
+                'blur' => ['none', '', TshirtSizeValidator::validate(...), ArbitraryValueValidator::validate(...)],
                 'brightness' => self::getNumber(),
                 'borderColor' => [$colors],
-                'borderRadius' => ['none', '', 'full', self::isTshirtSize(...), self::isArbitraryLength(...)],
-                'borderSpacing' => [$spacing],
-                'borderWidth' => self::getLengthWithEmpty(),
+                'borderRadius' => ['none', '', 'full', TshirtSizeValidator::validate(...), ArbitraryValueValidator::validate(...)],
+                'borderSpacing' => self::getSpacingWithArbitrary($spacing),
+                'borderWidth' => self::getLengthWithEmptyAndArbitrary(),
                 'contrast' => self::getNumber(),
                 'grayscale' => self::getZeroAndEmpty(),
                 'hueRotate' => self::getNumberAndArbitrary(),
                 'invert' => self::getZeroAndEmpty(),
-                'gap' => [$spacing],
+                'gap' => self::getSpacingWithArbitrary($spacing),
                 'gradientColorStops' => [$colors],
-                'gradientColorStopPositions' => [self::isPercent(...), self::isArbitraryLength(...)],
-                'inset' => self::getSpacingWithAuto($spacing),
-                'margin' => self::getSpacingWithAuto($spacing),
+                'gradientColorStopPositions' => [PercentValidator::validate(...), ArbitraryLengthValidator::validate(...)],
+                'inset' => self::getSpacingWithAutoAndArbitrary($spacing),
+                'margin' => self::getSpacingWithAutoAndArbitrary($spacing),
                 'opacity' => self::getNumber(),
-                'padding' => [$spacing],
+                'padding' => self::getSpacingWithArbitrary($spacing),
                 'saturate' => self::getNumber(),
                 'scale' => self::getNumber(),
                 'sepia' => self::getZeroAndEmpty(),
                 'skew' => self::getNumberAndArbitrary(),
-                'space' => [$spacing],
-                'translate' => [$spacing],
+                'space' => self::getSpacingWithArbitrary($spacing),
+                'translate' => self::getSpacingWithArbitrary($spacing),
             ],
             'classGroups' => [
                 // Layout
@@ -146,7 +148,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/aspect-ratio
                  */
-                'aspect' => [['aspect' => ['auto', 'square', 'video', self::isArbitraryValue(...)]]],
+                'aspect' => [['aspect' => ['auto', 'square', 'video', ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Container
                  *
@@ -158,7 +160,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/columns
                  */
-                'columns' => [['columns' => [self::isTshirtSize(...)]]],
+                'columns' => [['columns' => [TshirtSizeValidator::validate(...)]]],
                 /**
                  * Break After
                  *
@@ -246,7 +248,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/object-position
                  */
-                'object-position' => [['object' => [...self::getPositions(), self::isArbitraryValue(...)]]],
+                'object-position' => [['object' => [...self::getPositions(), ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Overflow
                  *
@@ -354,14 +356,14 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/z-index
                  */
-                'z' => [['z' => ['auto', self::isInteger(...)]]],
+                'z' => [['z' => ['auto', IntegerValidator::validate(...), ArbitraryValueValidator::validate(...)]]],
                 // Flexbox and Grid
                 /**
                  * Flex Basis
                  *
                  * @see https://tailwindcss.com/docs/flex-basis
                  */
-                'basis' => [['basis' => [$spacing]]],
+                'basis' => [['basis' => self::getSpacingWithAutoAndArbitrary($space)]],
                 /**
                  * Flex Direction
                  *
@@ -379,7 +381,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/flex
                  */
-                'flex' => [['flex' => ['1', 'auto', 'initial', 'none', self::isArbitraryValue(...)]]],
+                'flex' => [['flex' => ['1', 'auto', 'initial', 'none', ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Flex Grow
                  *
@@ -397,19 +399,19 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/order
                  */
-                'order' => [['order' => ['first', 'last', 'none', self::isInteger(...)]]],
+                'order' => [['order' => ['first', 'last', 'none', IntegerValidator::validate(...), ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Grid Template Columns
                  *
                  * @see https://tailwindcss.com/docs/grid-template-columns
                  */
-                'grid-cols' => [['grid-cols' => [self::isAny(...)]]],
+                'grid-cols' => [['grid-cols' => [AnyValueValidator::validate(...)]]],
                 /**
                  * Grid Column Start / End
                  *
                  * @see https://tailwindcss.com/docs/grid-column
                  */
-                'col-start-end' => [['col' => ['auto', ['span' => [self::isInteger(...)]], self::isArbitraryValue(...)]]],
+                'col-start-end' => [['col' => ['auto', ['span' => ['full', IntegerValidator::validate(...), ArbitraryValueValidator::validate(...)]], ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Grid Column Start
                  *
@@ -427,13 +429,13 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/grid-template-rows
                  */
-                'grid-rows' => [['grid-rows' => [self::isAny(...)]]],
+                'grid-rows' => [['grid-rows' => [AnyValueValidator::validate(...)]]],
                 /**
                  * Grid Row Start / End
                  *
                  * @see https://tailwindcss.com/docs/grid-row
                  */
-                'row-start-end' => [['row' => ['auto', ['span' => [self::isInteger(...)]], self::isArbitraryValue(...)]]],
+                'row-start-end' => [['row' => ['auto', ['span' => [IntegerValidator::validate(...), ArbitraryValueValidator::validate(...)]], ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Grid Row Start
                  *
@@ -457,13 +459,13 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/grid-auto-columns
                  */
-                'auto-cols' => [['auto-cols' => ['auto', 'min', 'max', 'fr', self::isArbitraryValue(...)]]],
+                'auto-cols' => [['auto-cols' => ['auto', 'min', 'max', 'fr', ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Grid Auto Rows
                  *
                  * @see https://tailwindcss.com/docs/grid-auto-rows
                  */
-                'auto-rows' => [['auto-rows' => ['auto', 'min', 'max', 'fr', self::isArbitraryValue(...)]]],
+                'auto-rows' => [['auto-rows' => ['auto', 'min', 'max', 'fr', ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Gap
                  *
@@ -675,13 +677,13 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/width
                  */
-                'w' => [['w' => ['auto', 'min', 'max', 'fit', $spacing]]],
+                'w' => [['w' => ['auto', 'min', 'max', 'fit', ArbitraryValueValidator::validate(...), $spacing]]],
                 /**
                  * Min-Width
                  *
                  * @see https://tailwindcss.com/docs/min-width
                  */
-                'min-w' => [['min-w' => ['min', 'max', 'fit', self::isLength(...)]]],
+                'min-w' => [['min-w' => ['min', 'max', 'fit', ArbitraryValueValidator::validate(...), LengthValidator::validate(...)]]],
                 /**
                  * Max-Width
                  *
@@ -697,9 +699,9 @@ class Config
                             'max',
                             'fit',
                             'prose',
-                            ['screen' => [self::isTshirtSize(...)]],
-                            self::isTshirtSize(...),
-                            self::isArbitraryLength(...),
+                            ['screen' => [TshirtSizeValidator::validate(...)]],
+                            TshirtSizeValidator::validate(...),
+                            ArbitraryValueValidator::validate(...),
                         ],
                     ],
                 ],
@@ -708,26 +710,26 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/height
                  */
-                'h' => [['h' => [$spacing, 'auto', 'min', 'max', 'fit']]],
+                'h' => [['h' => [ArbitraryValueValidator::validate(...), $spacing, 'auto', 'min', 'max', 'fit']]],
                 /**
                  * Min-Height
                  *
                  * @see https://tailwindcss.com/docs/min-height
                  */
-                'min-h' => [['min-h' => ['min', 'max', 'fit', self::isLength(...)]]],
+                'min-h' => [['min-h' => ['min', 'max', 'fit', LengthValidator::validate(...), ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Max-Height
                  *
                  * @see https://tailwindcss.com/docs/max-height
                  */
-                'max-h' => [['max-h' => [$spacing, 'min', 'max', 'fit']]],
+                'max-h' => [['max-h' => [ArbitraryValueValidator::validate(...), $spacing, 'min', 'max', 'fit']]],
                 // Typography
                 /**
                  * Font Size
                  *
                  * @see https://tailwindcss.com/docs/font-size
                  */
-                'font-size' => [['text' => ['base', self::isTshirtSize(...), self::isArbitraryLength(...)]]],
+                'font-size' => [['text' => ['base', TshirtSizeValidator::validate(...), ArbitraryLengthValidator::validate(...)]]],
                 /**
                  * Font Smoothing
                  *
@@ -757,7 +759,7 @@ class Config
                             'bold',
                             'extrabold',
                             'black',
-                            self::isArbitraryNumber(...),
+                            ArbitraryNumberValidator::validate(...),
                         ],
                     ],
                 ],
@@ -766,7 +768,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/font-family
                  */
-                'font-family' => [['font' => [self::isAny(...)]]],
+                'font-family' => [['font' => [AnyValueValidator::validate(...)]]],
                 /**
                  * Font Variant Numeric
                  *
@@ -817,7 +819,7 @@ class Config
                             'wide',
                             'wider',
                             'widest',
-                            self::isArbitraryLength(...),
+                            ArbitraryValueValidator::validate(...),
                         ],
                     ],
                 ],
@@ -826,27 +828,36 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/line-clamp
                  */
-                'line-clamp' => [['line-clamp' => ['none', self::isNumber(...), self::isArbitraryNumber(...)]]],
+                'line-clamp' => [['line-clamp' => ['none', NumberValidator::validate(...), ArbitraryNumberValidator::validate(...)]]],
                 /**
                  * Line Height
                  *
                  * @see https://tailwindcss.com/docs/line-height
                  */
                 'leading' => [
-                    ['leading' => ['none', 'tight', 'snug', 'normal', 'relaxed', 'loose', self::isLength(...)]],
+                    ['leading' => [
+                        'none',
+                        'tight',
+                        'snug',
+                        'normal',
+                        'relaxed',
+                        'loose',
+                        LengthValidator::validate(...),
+                        ArbitraryValueValidator::validate(...),
+                    ]],
                 ],
                 /**
                  * List Style Image
                  *
                  * @see https://tailwindcss.com/docs/list-style-image
                  */
-                'list-image' => [['list-image' => ['none', self::isArbitraryValue(...)]]],
+                'list-image' => [['list-image' => ['none', ArbitraryValueValidator::validate(...)]]],
                 /**
                  * List Style Type
                  *
                  * @see https://tailwindcss.com/docs/list-style-type
                  */
-                'list-style-type' => [['list' => ['none', 'disc', 'decimal', self::isArbitraryValue(...)]]],
+                'list-style-type' => [['list' => ['none', 'disc', 'decimal', ArbitraryValueValidator::validate(...)]]],
                 /**
                  * List Style Position
                  *
@@ -901,13 +912,13 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/text-decoration-thickness
                  */
-                'text-decoration-thickness' => [['decoration' => ['auto', 'from-font', self::isLength(...)]]],
+                'text-decoration-thickness' => [['decoration' => ['auto', 'from-font', LengthValidator::validate(...), ArbitraryLengthValidator::validate(...)]]],
                 /**
                  * Text Underline Offset
                  *
                  * @see https://tailwindcss.com/docs/text-underline-offset
                  */
-                'underline-offset' => [['underline-offset' => ['auto', self::isLength(...)]]],
+                'underline-offset' => [['underline-offset' => ['auto', LengthValidator::validate(...), ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Text Decoration Color
                  *
@@ -931,7 +942,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/text-indent
                  */
-                'indent' => [['indent' => [$spacing]]],
+                'indent' => [['indent' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Vertical Alignment
                  *
@@ -948,7 +959,7 @@ class Config
                             'text-bottom',
                             'sub',
                             'super',
-                            self::isArbitraryLength(...),
+                            ArbitraryValueValidator::validate(...),
                         ],
                     ],
                 ],
@@ -977,7 +988,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/content
                  */
-                'content' => [['content' => ['none', self::isArbitraryValue(...)]]],
+                'content' => [['content' => ['none', ArbitraryValueValidator::validate(...)]]],
                 // Backgrounds
                 /**
                  * Background Attachment
@@ -1009,7 +1020,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/background-position
                  */
-                'bg-position' => [['bg' => [...self::getPositions(), self::isArbitraryPosition(...)]]],
+                'bg-position' => [['bg' => [...self::getPositions(), ArbitraryPositionValidator::validate(...)]]],
                 /**
                  * Background Repeat
                  *
@@ -1021,7 +1032,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/background-size
                  */
-                'bg-size' => [['bg' => ['auto', 'cover', 'contain', self::isArbitrarySize(...)]]],
+                'bg-size' => [['bg' => ['auto', 'cover', 'contain', ArbitrarySizeValidator::validate(...)]]],
                 /**
                  * Background Image
                  *
@@ -1032,7 +1043,7 @@ class Config
                         'bg' => [
                             'none',
                             ['gradient-to' => ['t', 'tr', 'r', 'br', 'b', 'bl', 'l', 'tl']],
-                            self::isArbitraryUrl(...),
+                            ArbitraryImageValidator::validate(...),
                         ],
                     ],
                 ],
@@ -1330,13 +1341,13 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/outline-offset
                  */
-                'outline-offset' => [['outline-offset' => [self::isLength(...)]]],
+                'outline-offset' => [['outline-offset' => [LengthValidator::validate(...), ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Outline Width
                  *
                  * @see https://tailwindcss.com/docs/outline-width
                  */
-                'outline-w' => [['outline' => [self::isLength(...)]]],
+                'outline-w' => [['outline' => [LengthValidator::validate(...), ArbitraryLengthValidator::validate(...)]]],
                 /**
                  * Outline Color
                  *
@@ -1348,7 +1359,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/ring-width
                  */
-                'ring-w' => [['ring' => self::getLengthWithEmpty()]],
+                'ring-w' => [['ring' => self::getLengthWithEmptyAndArbitrary()]],
                 /**
                  * Ring Width Inset
                  *
@@ -1372,7 +1383,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/ring-offset-width
                  */
-                'ring-offset-w' => [['ring-offset' => [self::isLength(...)]]],
+                'ring-offset-w' => [['ring-offset' => [LengthValidator::validate(...), ArbitraryLengthValidator::validate(...)]]],
                 /**
                  * Ring Offset Color
                  *
@@ -1385,13 +1396,13 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/box-shadow
                  */
-                'shadow' => [['shadow' => ['', 'inner', 'none', self::isTshirtSize(...), self::isArbitraryShadow(...)]]],
+                'shadow' => [['shadow' => ['', 'inner', 'none', TshirtSizeValidator::validate(...), ArbitraryShadowValidator::validate(...)]]],
                 /**
                  * Box Shadow Color
                  *
                  * @see https://tailwindcss.com/docs/box-shadow-color
                  */
-                'shadow-color' => [['shadow' => [self::isAny(...)]]],
+                'shadow-color' => [['shadow' => [AnyValueValidator::validate(...)]]],
                 /**
                  * Opacity
                  *
@@ -1441,7 +1452,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/drop-shadow
                  */
-                'drop-shadow' => [['drop-shadow' => ['', 'none', self::isTshirtSize(...), self::isArbitraryValue(...)]]],
+                'drop-shadow' => [['drop-shadow' => ['', 'none', TshirtSizeValidator::validate(...), ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Grayscale
                  *
@@ -1586,7 +1597,7 @@ class Config
                             'opacity',
                             'shadow',
                             'transform',
-                            self::isArbitraryValue(...),
+                            ArbitraryValueValidator::validate(...),
                         ],
                     ],
                 ],
@@ -1601,7 +1612,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/transition-timing-function
                  */
-                'ease' => [['ease' => ['linear', 'in', 'out', 'in-out', self::isArbitraryValue(...)]]],
+                'ease' => [['ease' => ['linear', 'in', 'out', 'in-out', ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Transition Delay
                  *
@@ -1613,7 +1624,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/animation
                  */
-                'animate' => [['animate' => ['none', 'spin', 'ping', 'pulse', 'bounce', self::isArbitraryValue(...)]]],
+                'animate' => [['animate' => ['none', 'spin', 'ping', 'pulse', 'bounce', ArbitraryValueValidator::validate(...)]]],
                 // Transforms
                 /**
                  * Transform
@@ -1644,7 +1655,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/rotate
                  */
-                'rotate' => [['rotate' => [self::isInteger(...), self::isArbitraryValue(...)]]],
+                'rotate' => [['rotate' => [IntegerValidator::validate(...), ArbitraryValueValidator::validate(...)]]],
                 /**
                  * Translate X
                  *
@@ -1686,7 +1697,7 @@ class Config
                             'bottom-left',
                             'left',
                             'top-left',
-                            self::isArbitraryValue(...),
+                            ArbitraryValueValidator::validate(...),
                         ],
                     ],
                 ],
@@ -1747,7 +1758,7 @@ class Config
                             'nwse-resize',
                             'zoom-in',
                             'zoom-out',
-                            self::isArbitraryValue(...),
+                            ArbitraryValueValidator::validate(...),
                         ],
                     ],
                 ],
@@ -1780,109 +1791,109 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/scroll-margin
                  */
-                'scroll-m' => [['scroll-m' => [$spacing]]],
+                'scroll-m' => [['scroll-m' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Margin X
                  *
                  * @see https://tailwindcss.com/docs/scroll-margin
                  */
-                'scroll-mx' => [['scroll-mx' => [$spacing]]],
+                'scroll-mx' => [['scroll-mx' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Margin Y
                  *
                  * @see https://tailwindcss.com/docs/scroll-margin
                  */
-                'scroll-my' => [['scroll-my' => [$spacing]]],
+                'scroll-my' => [['scroll-my' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Margin Start
                  *
                  * @see https://tailwindcss.com/docs/scroll-margin
                  */
-                'scroll-ms' => [['scroll-ms' => [$spacing]]],
+                'scroll-ms' => [['scroll-ms' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Margin End
                  *
                  * @see https://tailwindcss.com/docs/scroll-margin
                  */
-                'scroll-me' => [['scroll-me' => [$spacing]]],
+                'scroll-me' => [['scroll-me' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Margin Top
                  *
                  * @see https://tailwindcss.com/docs/scroll-margin
                  */
-                'scroll-mt' => [['scroll-mt' => [$spacing]]],
+                'scroll-mt' => [['scroll-mt' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Margin Right
                  *
                  * @see https://tailwindcss.com/docs/scroll-margin
                  */
-                'scroll-mr' => [['scroll-mr' => [$spacing]]],
+                'scroll-mr' => [['scroll-mr' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Margin Bottom
                  *
                  * @see https://tailwindcss.com/docs/scroll-margin
                  */
-                'scroll-mb' => [['scroll-mb' => [$spacing]]],
+                'scroll-mb' => [['scroll-mb' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Margin Left
                  *
                  * @see https://tailwindcss.com/docs/scroll-margin
                  */
-                'scroll-ml' => [['scroll-ml' => [$spacing]]],
+                'scroll-ml' => [['scroll-ml' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Padding
                  *
                  * @see https://tailwindcss.com/docs/scroll-padding
                  */
-                'scroll-p' => [['scroll-p' => [$spacing]]],
+                'scroll-p' => [['scroll-p' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Padding X
                  *
                  * @see https://tailwindcss.com/docs/scroll-padding
                  */
-                'scroll-px' => [['scroll-px' => [$spacing]]],
+                'scroll-px' => [['scroll-px' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Padding Y
                  *
                  * @see https://tailwindcss.com/docs/scroll-padding
                  */
-                'scroll-py' => [['scroll-py' => [$spacing]]],
+                'scroll-py' => [['scroll-py' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Padding Start
                  *
                  * @see https://tailwindcss.com/docs/scroll-padding
                  */
-                'scroll-ps' => [['scroll-ps' => [$spacing]]],
+                'scroll-ps' => [['scroll-ps' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Padding End
                  *
                  * @see https://tailwindcss.com/docs/scroll-padding
                  */
-                'scroll-pe' => [['scroll-pe' => [$spacing]]],
+                'scroll-pe' => [['scroll-pe' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Padding Top
                  *
                  * @see https://tailwindcss.com/docs/scroll-padding
                  */
-                'scroll-pt' => [['scroll-pt' => [$spacing]]],
+                'scroll-pt' => [['scroll-pt' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Padding Right
                  *
                  * @see https://tailwindcss.com/docs/scroll-padding
                  */
-                'scroll-pr' => [['scroll-pr' => [$spacing]]],
+                'scroll-pr' => [['scroll-pr' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Padding Bottom
                  *
                  * @see https://tailwindcss.com/docs/scroll-padding
                  */
-                'scroll-pb' => [['scroll-pb' => [$spacing]]],
+                'scroll-pb' => [['scroll-pb' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Padding Left
                  *
                  * @see https://tailwindcss.com/docs/scroll-padding
                  */
-                'scroll-pl' => [['scroll-pl' => [$spacing]]],
+                'scroll-pl' => [['scroll-pl' => self::getSpacingWithArbitrary($spacing)]],
                 /**
                  * Scroll Snap Align
                  *
@@ -1917,12 +1928,36 @@ class Config
                         'touch' => [
                             'auto',
                             'none',
-                            'pinch-zoom',
                             'manipulation',
-                            ['pan' => ['x', 'left', 'right', 'y', 'up', 'down']],
                         ],
                     ],
                 ],
+                /**
+                 * Touch Action X
+                 *
+                 * @see https://tailwindcss.com/docs/touch-action
+                 */
+                'touch-x' => [
+                    [
+                        'touch-pan' => ['x', 'left', 'right'],
+                    ],
+                ],
+                /**
+                 * Touch Action Y
+                 *
+                 * @see https://tailwindcss.com/docs/touch-action
+                 */
+                'touch-y' => [
+                    [
+                        'touch-pan' => ['y', 'up', 'down'],
+                    ],
+                ],
+                /**
+                 * Touch Action Pinch Zoom
+                 *
+                 * @see https://tailwindcss.com/docs/touch-action
+                 */
+                'touch-pz' => ['touch-pinch-zoom'],
                 /**
                  * User Select
                  *
@@ -1935,7 +1970,7 @@ class Config
                  * @see https://tailwindcss.com/docs/will-change
                  */
                 'will-change' => [
-                    ['will-change' => ['auto', 'scroll', 'contents', 'transform', self::isArbitraryValue(...)]],
+                    ['will-change' => ['auto', 'scroll', 'contents', 'transform', ArbitraryValueValidator::validate(...)]],
                 ],
                 // SVG
                 /**
@@ -1949,7 +1984,7 @@ class Config
                  *
                  * @see https://tailwindcss.com/docs/stroke-width
                  */
-                'stroke-w' => [['stroke' => [self::isLength(...), self::isArbitraryNumber(...)]]],
+                'stroke-w' => [['stroke' => [LengthValidator::validate(...), ArbitraryLengthValidator::validate(...), ArbitraryNumberValidator::validate(...)]]],
                 /**
                  * Stroke
                  *
@@ -2056,6 +2091,10 @@ class Config
                 ],
                 'scroll-px' => ['scroll-pr', 'scroll-pl'],
                 'scroll-py' => ['scroll-pt', 'scroll-pb'],
+                'touch' => ['touch-x', 'touch-y', 'touch-pz'],
+                'touch-x' => ['touch'],
+                'touch-y' => ['touch'],
+                'touch-pz' => ['touch'],
             ],
             'conflictingClassGroupModifiers' => [
                 'font-size' => ['leading'],
@@ -2063,82 +2102,9 @@ class Config
         ];
     }
 
-    private static function fromTheme(string $key): ThemeGetter
+    public static function fromTheme(string $key): ThemeGetter
     {
         return new ThemeGetter($key);
-    }
-
-    public static function isLength(string $value): bool
-    {
-        if (self::isNumber($value)) {
-            return true;
-        }
-        if (self::stringLengths()->contains($value)) {
-            return true;
-        }
-        if (Str::hasMatch(self::FRACTION_REGEX, $value)) {
-            return true;
-        }
-
-        return (bool) self::isArbitraryLength($value);
-    }
-
-    private static function isNumber(string $value): bool
-    {
-        return is_numeric($value);
-    }
-
-    /**
-     * @return Collection<int, string>
-     */
-    private static function stringLengths(): Collection
-    {
-        return collect(['px', 'full', 'screen']);
-    }
-
-    public static function isArbitraryLength(string $value): bool
-    {
-        return self::getIsArbitraryValue($value, 'length', self::isLengthOnly(...));
-    }
-
-    private static function isLengthOnly(string $value): bool
-    {
-        return Str::hasMatch(self::LENGTH_UNIT_REGEX, $value);
-    }
-
-    private static function getIsArbitraryValue(string $value, string $label, callable $isLengthOnly): bool
-    {
-        preg_match(self::ARBITRARY_VALUE_REGEX, (string) $value, $result);
-
-        if ($result !== []) {
-            if ($result[1] !== '' && $result[1] !== '0') {
-                return $result[1] === $label;
-            }
-
-            return $isLengthOnly($result[2] ?? null);
-        }
-
-        return false;
-    }
-
-    public static function isArbitraryValue(string $value): bool
-    {
-        return Str::hasMatch(self::ARBITRARY_VALUE_REGEX, $value);
-    }
-
-    public static function isArbitraryNumber(string $value): bool
-    {
-        return self::getIsArbitraryValue($value, 'number', self::isNumber(...));
-    }
-
-    public static function isAny(string $value): bool
-    {
-        return true;
-    }
-
-    public static function isTshirtSize(string $value): bool
-    {
-        return Str::hasMatch(self::T_SHIRT_UNIT_REGEX, $value);
     }
 
     /**
@@ -2147,19 +2113,19 @@ class Config
     private static function getNumber(): array
     {
         return [
-            self::isNumber(...),
-            self::isArbitraryNumber(...),
+            NumberValidator::validate(...),
+            ArbitraryNumberValidator::validate(...),
         ];
     }
 
     /**
      * @return array<int, string|callable>
      */
-    private static function getLengthWithEmpty(): array
+    private static function getLengthWithEmptyAndArbitrary(): array
     {
         return [
             '',
-            self::isLength(...),
+            LengthValidator::validate(...),
         ];
     }
 
@@ -2171,7 +2137,7 @@ class Config
         return [
             '',
             '0',
-            self::isArbitraryValue(...),
+            ArbitraryValueValidator::validate(...),
         ];
     }
 
@@ -2180,25 +2146,28 @@ class Config
      */
     private static function getNumberAndArbitrary(): array
     {
-        return [self::isNumber(...), self::isArbitraryValue(...)];
-    }
-
-    public static function isPercent(string $value): bool
-    {
-        if (! Str::endsWith($value, '%')) {
-            return false;
-        }
-
-        return (bool) self::isNumber(Str::of($value)->substr(0, -1)->toString());
+        return [NumberValidator::validate(...), ArbitraryValueValidator::validate(...)];
     }
 
     /**
-     * @return array<int, string|ThemeGetter>
+     * @return array<int, string|callable|ThemeGetter>
      */
-    private static function getSpacingWithAuto(ThemeGetter $spacing): array
+    private static function getSpacingWithAutoAndArbitrary(ThemeGetter $spacing): array
     {
         return [
             'auto',
+            ArbitraryValueValidator::validate(...),
+            $spacing,
+        ];
+    }
+
+    /**
+     * @return array<int, callable|ThemeGetter>
+     */
+    private static function getSpacingWithArbitrary(ThemeGetter $spacing): array
+    {
+        return [
+            ArbitraryValueValidator::validate(...),
             $spacing,
         ];
     }
@@ -2264,20 +2233,6 @@ class Config
         ];
     }
 
-    public static function isInteger(string $value): bool
-    {
-        if (self::isIntegerOnly($value)) {
-            return true;
-        }
-
-        return self::getIsArbitraryValue($value, 'number', self::isIntegerOnly(...));
-    }
-
-    private static function isIntegerOnly(string $value): bool
-    {
-        return (string) (int) $value === $value;
-    }
-
     /**
      * @return array<int, string|callable>
      */
@@ -2285,8 +2240,8 @@ class Config
     {
         return [
             'auto',
-            self::isNumber(...),
-            self::isArbitraryValue(...),
+            NumberValidator::validate(...),
+            ArbitraryValueValidator::validate(...),
         ];
     }
 
@@ -2318,41 +2273,6 @@ class Config
             'double',
             'none',
         ];
-    }
-
-    public static function isArbitraryPosition(string $value): bool
-    {
-        return self::getIsArbitraryValue($value, 'position', self::isNever(...));
-    }
-
-    public static function isArbitrarySize(string $value): bool
-    {
-        return self::getIsArbitraryValue($value, 'size', self::isNever(...));
-    }
-
-    public static function isArbitraryUrl(string $value): bool
-    {
-        return self::getIsArbitraryValue($value, 'url', self::isUrl(...));
-    }
-
-    public static function isArbitraryShadow(string $value): bool
-    {
-        return self::getIsArbitraryValue($value, '', self::isShadow(...));
-    }
-
-    private static function isNever(string $value): bool
-    {
-        return false;
-    }
-
-    private static function isUrl(string $value): bool
-    {
-        return Str::startsWith($value, 'url(');
-    }
-
-    private static function isShadow(string $value): bool
-    {
-        return Str::hasMatch(self::SHADOW_REGEX, $value);
     }
 
     /**
