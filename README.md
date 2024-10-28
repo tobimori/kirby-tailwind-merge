@@ -155,9 +155,10 @@ If you still want to use variables, that e.g. come from the CMS directly, you ca
 
 ## Options
 
-| Option   | Default | Description                            |
-| -------- | ------- | -------------------------------------- |
-| `prefix` | ``      | Set a prefix for your tailwind classes |
+| Option   | Default | Description                                           |
+| -------- | ------- | ----------------------------------------------------- |
+| `prefix` | `''`    | Set a prefix for your tailwind classes                |
+| `cache`  | `false` | Enable caching for tailwind merge using a Kirby Cache |
 
 Options allow you to fine tune the behaviour of the plugin. You can set them in your `config.php` file:
 
@@ -165,6 +166,7 @@ Options allow you to fine tune the behaviour of the plugin. You can set them in 
 return [
     'tobimori.tailwind-merge' => [
         'prefix' => 'tw-',
+        'cache' => true
     ],
 ];
 ```

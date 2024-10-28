@@ -7,11 +7,23 @@ use TailwindMerge\TailwindMerge;
 
 class TwMerge
 {
+  private static TailwindMerge $_instance;
+  
   public static function instance()
   {
-    return TailwindMerge::factory()->withConfiguration([
-      'prefix' => option('tobimori.tailwind-merge.prefix', '')
-    ])->make();
+    if (!isset(self::$_instance)) {
+      $factory = TailwindMerge::factory()->withConfiguration([
+        'prefix' => option('tobimori.tailwind-merge.prefix', '')
+      ]);
+
+      if(option('tobimori.tailwind-merge.cache', false)) {
+        $factory = $factory->withCache(new KirbyCacheAdapter('tobimori.tailwind-merge'));
+      }
+
+      self::$_instance = $factory->make();
+    }
+
+    return self::$_instance;
   }
 
   public static function buildClassAttr(string|array $classes): string
