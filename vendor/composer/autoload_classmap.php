@@ -43,5 +43,6 @@ return array(
     'TailwindMerge\\ValueObjects\\ClassValidatorObject' => $vendorDir . '/gehrisandro/tailwind-merge-php/src/ValueObjects/ClassValidatorObject.php',
     'TailwindMerge\\ValueObjects\\ParsedClass' => $vendorDir . '/gehrisandro/tailwind-merge-php/src/ValueObjects/ParsedClass.php',
     'TailwindMerge\\ValueObjects\\ThemeGetter' => $vendorDir . '/gehrisandro/tailwind-merge-php/src/ValueObjects/ThemeGetter.php',
+    'tobimori\\KirbyCacheAdapter' => $baseDir . '/classes/KirbyCacheAdapter.php',
     'tobimori\\TwMerge' => $baseDir . '/classes/TwMerge.php',
 );

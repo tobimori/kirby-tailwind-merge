@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit312d406bef150e9579cbbf902b985c58
+class ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843
 {
     public static $files = array (
         '56980320311550930ae06096cc814eaf' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/TailwindMerge.php',
@@ -87,15 +87,16 @@ class ComposerStaticInit312d406bef150e9579cbbf902b985c58
         'TailwindMerge\\ValueObjects\\ClassValidatorObject' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/ValueObjects/ClassValidatorObject.php',
         'TailwindMerge\\ValueObjects\\ParsedClass' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/ValueObjects/ParsedClass.php',
         'TailwindMerge\\ValueObjects\\ThemeGetter' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/ValueObjects/ThemeGetter.php',
+        'tobimori\\KirbyCacheAdapter' => __DIR__ . '/../..' . '/classes/KirbyCacheAdapter.php',
         'tobimori\\TwMerge' => __DIR__ . '/../..' . '/classes/TwMerge.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit312d406bef150e9579cbbf902b985c58::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit312d406bef150e9579cbbf902b985c58::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit312d406bef150e9579cbbf902b985c58::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843::$classMap;
 
         }, null, ClassLoader::class);
     }
