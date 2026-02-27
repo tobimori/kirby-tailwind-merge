@@ -2,11 +2,11 @@
 
 # Kirby Tailwind Merge
 
-Intelligently merge Tailwind classes without style conflicts in your Kirby templates.
+Intelligently merge Tailwind CSS v4 classes without style conflicts in your Kirby templates.
 
 ![Example for Tailwind Merge](.github/example.png)
 
-This plugin relies on [tailwind-merge-php by Sandro Gehri](https://github.com/gehrisandro/tailwind-merge-php) for merging classes and only adapts it to work in the "Kirby ecosystem". Any issues related to merging classes should probably reported over there.
+This plugin relies on [tailwind-merge-php by Tales from a Dev](https://github.com/tales-from-a-dev/tailwind-merge-php) for merging classes and only adapts it to work in the "Kirby ecosystem". Any issues related to merging classes should probably reported over there.
 
 ## Installation
 
@@ -14,13 +14,9 @@ This plugin relies on [tailwind-merge-php by Sandro Gehri](https://github.com/ge
 composer require tobimori/kirby-tailwind-merge
 ```
 
-#### Manual installation
-
-Download and copy this repository to `/site/plugins/kirby-tailwind-merge`, or apply this repository as Git submodule.
-
 ## Usage
 
-This plugin provides two helper functions to use in your blueprints. Whether functions should be registered can be controlled in your `config.php`, see [Options](#options).
+This plugin provides helper functions to use in your templates.
 
 ### `attr()`
 
@@ -103,73 +99,70 @@ This conditional merge syntax using arrays can be used with the `merge()` and `a
     ]) ?>>[...]</div>
 ```
 
-### `mod($modifier, $classes)`
-
-`mod()` applies the specified modifier/variant to each class supplied in the `$class` string. It also applies Tailwind Merge behaviour and outputs the contents of class attribute. This is useful when you have a bunch of classes and want them all to activate at the same modifier.
-
-#### Example
-
-```php
-<div class="flex mb-4 <?= mod('lg', 'mb-2 flex-col') ?>">[...]</div>
-
-// output
-<div class="flex mb-4 lg:mb-2 lg:flex-col">[...]</div>
-```
-
-#### "But Tailwind won't parse my classes then!"
-
-I hear you, but thankfully Tailwind allows us to customize the parser to our needs. This is not a 100% perfect technique due to being reliant on regexing' the classes, but it works for most cases.
-
-With a custom transformer function to scan for the `mod()` function, your `tailwind.config.js` could look like this:
-
-```js
-module.exports = {
-  content: {
-    files: ["./site/**/*.php", "./src/index.js"],
-    transform: (code) => {
-      const variantGroupsRegex = /mod\(.([^,"']+)[^\[]+["'](.+)["']\)/g
-      const variantGroupMatches = [...code.matchAll(variantGroupsRegex)]
-
-      variantGroupMatches.forEach(([matchStr, variants, classes]) => {
-        const parsedClasses = classes
-          .split(" ")
-          .map((cls) => `${variants}:${cls}`)
-          .join(" ")
-
-        code = code.replaceAll(matchStr, parsedClasses)
-      })
-
-      return code
-    }
-  },
-  theme: {
-    extend: {}
-  },
-  plugins: []
-}
-```
-
-For simplicity in parsing the function with Tailwind, the `mod()` function doesn't support arrays. With this approach, you're also not aple to e.g. use a variable inside the function, but only direct strings.
-
-If you still want to use variables, that e.g. come from the CMS directly, you can add the generated classes to your [`safelist`](https://tailwindcss.com/docs/content-configuration#safelisting-classes) and they'll be generated to matter what.
-
 ## Options
 
-| Option   | Default | Description                                           |
-| -------- | ------- | ----------------------------------------------------- |
-| `prefix` | `''`    | Set a prefix for your tailwind classes                |
-| `cache`  | `false` | Enable caching for tailwind merge using a Kirby Cache |
+| Option   | Default | Description                                                                   |
+| -------- | ------- | ----------------------------------------------------------------------------- |
+| `config` | `[]`    | Additional [tailwind-merge configuration][tw-merge-config] (array or closure) |
+| `cache`  | `true`  | Disable caching using Kirbys Cache                                            |
 
-Options allow you to fine tune the behaviour of the plugin. You can set them in your `config.php` file:
+Options can be set in your `config.php` file:
 
 ```php
 return [
     'tobimori.tailwind-merge' => [
-        'prefix' => 'tw-',
+        'config' => [
+            'prefix' => 'tw-',
+        ],
         'cache' => true
     ],
 ];
 ```
+
+The `config` option also accepts a closure for dynamic configuration. It supports all keys from the [underlying library][tw-merge-config] — the most useful ones being `prefix`, `theme`, `classGroups`, and `conflictingClassGroups`.
+
+### Custom theme values
+
+If you're using Tailwind CSS v4 without custom `@theme` values, the plugin works out of the box: standard class names, numeric values, and arbitrary values are all handled automatically.
+
+However, if you've defined custom `@theme` variables in your CSS, you need to register those names so tailwind-merge can recognize them as conflicting. For example, given a config like this:
+
+```css
+@theme {
+    --font-heading: "TT Interphases Pro Condensed", sans-serif;
+    --font-sans: "TT Interphases Pro", sans-serif;
+    --font-handwriting: "Caveat", cursive;
+
+    --text-h1: clamp(2.25rem, /* ... */, 4rem);
+    --text-h2: clamp(1.75rem, /* ... */, 3rem);
+    --text-h3: clamp(1.5rem, /* ... */, 2rem);
+    --text-h4: clamp(1.375rem, /* ... */, 1.75rem);
+
+    --font-weight-normal: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+}
+```
+
+You'd extend the `theme` config with the custom value names (the part after the last `-` in the CSS variable):
+
+```php
+return [
+    'tobimori.tailwind-merge' => [
+        'config' => [
+            'theme' => [
+                'text' => ['h1', 'h2', 'h3', 'h4'],
+                'font' => ['heading', 'sans', 'handwriting'],
+                'font-weight' => ['normal', 'semibold', 'bold'],
+            ],
+        ],
+    ],
+];
+```
+
+These values are merged with the built-in defaults, so you don't need to re-declare standard names. Without this config, `merge('text-h1', 'text-h2')` would keep both classes — with it, the plugin correctly resolves to `text-h2`.
+
+[tw-merge-config]: https://github.com/tales-from-a-dev/tailwind-merge-php/blob/main/docs/index.md#configuration
 
 ## Support
 
@@ -178,4 +171,4 @@ return [
 ## License
 
 [MIT License](./LICENSE)
-Copyright © 2023 Tobias Möritz
+Copyright © 2023-2026 Tobias Möritz

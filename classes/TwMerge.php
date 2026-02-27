@@ -3,24 +3,29 @@
 namespace tobimori;
 
 use Kirby\Toolkit\Html;
-use TailwindMerge\TailwindMerge;
+use TalesFromADev\TailwindMerge\TailwindMerge;
 
 class TwMerge
 {
   private static TailwindMerge $_instance;
-  
+
   public static function instance()
   {
     if (!isset(self::$_instance)) {
-      $factory = TailwindMerge::factory()->withConfiguration([
-        'prefix' => option('tobimori.tailwind-merge.prefix', '')
-      ]);
+      $config = option('tobimori.tailwind-merge.config', []);
 
-      if(option('tobimori.tailwind-merge.cache', false)) {
-        $factory = $factory->withCache(new KirbyCacheAdapter('tobimori.tailwind-merge'));
+      if (is_callable($config)) {
+        $config = $config();
       }
 
-      self::$_instance = $factory->make();
+      $cache = option('tobimori.tailwind-merge.cache', true)
+        ? new KirbyCacheAdapter('tobimori.tailwind-merge')
+        : null;
+
+      self::$_instance = new TailwindMerge(
+        additionalConfiguration: $config,
+        cache: $cache,
+      );
     }
 
     return self::$_instance;
@@ -78,10 +83,5 @@ class TwMerge
   public static function merge(...$classes): string
   {
     return self::attr('class', $classes) ?? ' ';
-  }
-
-  public static function modify(string $modifier, string $classes): string
-  {
-    return self::cls($modifier . ':' . implode(" {$modifier}:", explode(' ', $classes)));
   }
 }

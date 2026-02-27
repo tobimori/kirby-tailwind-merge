@@ -7,43 +7,75 @@ namespace Composer\Autoload;
 class ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843
 {
     public static $files = array (
-        '56980320311550930ae06096cc814eaf' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/TailwindMerge.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
+        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'b896c44c77881af352801464aacb9c14' => __DIR__ . '/../..' . '/helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        't' => 
+        't' =>
         array (
             'tobimori\\' => 9,
         ),
-        'T' => 
+        'T' =>
         array (
-            'TailwindMerge\\' => 14,
+            'TalesFromADev\\TailwindMerge\\' => 28,
         ),
-        'P' => 
+        'S' =>
+        array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
+            'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
+            'Symfony\\Polyfill\\Ctype\\' => 23,
+            'Symfony\\Component\\String\\' => 25,
+        ),
+        'P' =>
         array (
             'Psr\\SimpleCache\\' => 16,
         ),
-        'K' => 
+        'K' =>
         array (
             'Kirby\\' => 6,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'tobimori\\' => 
+        'tobimori\\' =>
         array (
             0 => __DIR__ . '/../..' . '/classes',
         ),
-        'TailwindMerge\\' => 
+        'TalesFromADev\\TailwindMerge\\' =>
         array (
-            0 => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src',
+            0 => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src',
         ),
-        'Psr\\SimpleCache\\' => 
+        'Symfony\\Polyfill\\Mbstring\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Polyfill\\Intl\\Normalizer\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
+        ),
+        'Symfony\\Polyfill\\Intl\\Grapheme\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme',
+        ),
+        'Symfony\\Polyfill\\Ctype\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'Symfony\\Component\\String\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/string',
+        ),
+        'Psr\\SimpleCache\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
         ),
-        'Kirby\\' => 
+        'Kirby\\' =>
         array (
             0 => __DIR__ . '/..' . '/getkirby/composer-installer/src',
         ),
@@ -55,38 +87,72 @@ class ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843
         'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
         'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
         'Kirby\\ComposerInstaller\\PluginInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
+        'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'Psr\\SimpleCache\\CacheException' => __DIR__ . '/..' . '/psr/simple-cache/src/CacheException.php',
         'Psr\\SimpleCache\\CacheInterface' => __DIR__ . '/..' . '/psr/simple-cache/src/CacheInterface.php',
         'Psr\\SimpleCache\\InvalidArgumentException' => __DIR__ . '/..' . '/psr/simple-cache/src/InvalidArgumentException.php',
-        'TailwindMerge\\Contracts\\TailwindMergeContract' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Contracts/TailwindMergeContract.php',
-        'TailwindMerge\\Contracts\\ValidatorContract' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Contracts/ValidatorContract.php',
-        'TailwindMerge\\Factory' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Factory.php',
-        'TailwindMerge\\Support\\Arr' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Support/Arr.php',
-        'TailwindMerge\\Support\\ClassMap' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Support/ClassMap.php',
-        'TailwindMerge\\Support\\Collection' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Support/Collection.php',
-        'TailwindMerge\\Support\\Config' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Support/Config.php',
-        'TailwindMerge\\Support\\Str' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Support/Str.php',
-        'TailwindMerge\\Support\\Stringable' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Support/Stringable.php',
-        'TailwindMerge\\Support\\TailwindClassParser' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Support/TailwindClassParser.php',
-        'TailwindMerge\\TailwindMerge' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/TailwindMerge.php',
-        'TailwindMerge\\Validators\\AnyValueValidator' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/AnyValueValidator.php',
-        'TailwindMerge\\Validators\\ArbitraryImageValidator' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/ArbitraryImageValidator.php',
-        'TailwindMerge\\Validators\\ArbitraryLengthValidator' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/ArbitraryLengthValidator.php',
-        'TailwindMerge\\Validators\\ArbitraryNumberValidator' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/ArbitraryNumberValidator.php',
-        'TailwindMerge\\Validators\\ArbitraryPositionValidator' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/ArbitraryPositionValidator.php',
-        'TailwindMerge\\Validators\\ArbitraryShadowValidator' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/ArbitraryShadowValidator.php',
-        'TailwindMerge\\Validators\\ArbitrarySizeValidator' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/ArbitrarySizeValidator.php',
-        'TailwindMerge\\Validators\\ArbitraryValueValidator' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/ArbitraryValueValidator.php',
-        'TailwindMerge\\Validators\\Concerns\\ValidatesArbitraryValue' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/Concerns/ValidatesArbitraryValue.php',
-        'TailwindMerge\\Validators\\IntegerValidator' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/IntegerValidator.php',
-        'TailwindMerge\\Validators\\LengthValidator' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/LengthValidator.php',
-        'TailwindMerge\\Validators\\NumberValidator' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/NumberValidator.php',
-        'TailwindMerge\\Validators\\PercentValidator' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/PercentValidator.php',
-        'TailwindMerge\\Validators\\TshirtSizeValidator' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/Validators/TshirtSizeValidator.php',
-        'TailwindMerge\\ValueObjects\\ClassPartObject' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/ValueObjects/ClassPartObject.php',
-        'TailwindMerge\\ValueObjects\\ClassValidatorObject' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/ValueObjects/ClassValidatorObject.php',
-        'TailwindMerge\\ValueObjects\\ParsedClass' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/ValueObjects/ParsedClass.php',
-        'TailwindMerge\\ValueObjects\\ThemeGetter' => __DIR__ . '/..' . '/gehrisandro/tailwind-merge-php/src/ValueObjects/ThemeGetter.php',
+        'Symfony\\Component\\String\\AbstractString' => __DIR__ . '/..' . '/symfony/string/AbstractString.php',
+        'Symfony\\Component\\String\\AbstractUnicodeString' => __DIR__ . '/..' . '/symfony/string/AbstractUnicodeString.php',
+        'Symfony\\Component\\String\\ByteString' => __DIR__ . '/..' . '/symfony/string/ByteString.php',
+        'Symfony\\Component\\String\\CodePointString' => __DIR__ . '/..' . '/symfony/string/CodePointString.php',
+        'Symfony\\Component\\String\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/string/Exception/ExceptionInterface.php',
+        'Symfony\\Component\\String\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/symfony/string/Exception/InvalidArgumentException.php',
+        'Symfony\\Component\\String\\Exception\\RuntimeException' => __DIR__ . '/..' . '/symfony/string/Exception/RuntimeException.php',
+        'Symfony\\Component\\String\\Inflector\\EnglishInflector' => __DIR__ . '/..' . '/symfony/string/Inflector/EnglishInflector.php',
+        'Symfony\\Component\\String\\Inflector\\FrenchInflector' => __DIR__ . '/..' . '/symfony/string/Inflector/FrenchInflector.php',
+        'Symfony\\Component\\String\\Inflector\\InflectorInterface' => __DIR__ . '/..' . '/symfony/string/Inflector/InflectorInterface.php',
+        'Symfony\\Component\\String\\Inflector\\SpanishInflector' => __DIR__ . '/..' . '/symfony/string/Inflector/SpanishInflector.php',
+        'Symfony\\Component\\String\\LazyString' => __DIR__ . '/..' . '/symfony/string/LazyString.php',
+        'Symfony\\Component\\String\\Slugger\\AsciiSlugger' => __DIR__ . '/..' . '/symfony/string/Slugger/AsciiSlugger.php',
+        'Symfony\\Component\\String\\Slugger\\SluggerInterface' => __DIR__ . '/..' . '/symfony/string/Slugger/SluggerInterface.php',
+        'Symfony\\Component\\String\\TruncateMode' => __DIR__ . '/..' . '/symfony/string/TruncateMode.php',
+        'Symfony\\Component\\String\\UnicodeString' => __DIR__ . '/..' . '/symfony/string/UnicodeString.php',
+        'Symfony\\Polyfill\\Ctype\\Ctype' => __DIR__ . '/..' . '/symfony/polyfill-ctype/Ctype.php',
+        'Symfony\\Polyfill\\Intl\\Grapheme\\Grapheme' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/Grapheme.php',
+        'Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Normalizer.php',
+        'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
+        'TalesFromADev\\TailwindMerge\\Helper\\Arr' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Helper/Arr.php',
+        'TalesFromADev\\TailwindMerge\\Helper\\Collection' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Helper/Collection.php',
+        'TalesFromADev\\TailwindMerge\\Support\\ClassGroupUtils' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/ClassGroupUtils.php',
+        'TalesFromADev\\TailwindMerge\\Support\\ClassListMerger' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/ClassListMerger.php',
+        'TalesFromADev\\TailwindMerge\\Support\\ClassMap' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/ClassMap.php',
+        'TalesFromADev\\TailwindMerge\\Support\\ClassNameParser' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/ClassNameParser.php',
+        'TalesFromADev\\TailwindMerge\\Support\\Config' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/Config.php',
+        'TalesFromADev\\TailwindMerge\\Support\\SortModifiers' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/SortModifiers.php',
+        'TalesFromADev\\TailwindMerge\\TailwindMerge' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/TailwindMerge.php',
+        'TalesFromADev\\TailwindMerge\\TailwindMergeInterface' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/TailwindMergeInterface.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\AnyNonArbitraryValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/AnyNonArbitraryValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\AnyValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/AnyValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryValueFamilyNameValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryValueFamilyNameValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryValueImageValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryValueImageValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryValueLengthValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryValueLengthValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryValueNumberValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryValueNumberValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryValuePositionValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryValuePositionValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryValueShadowValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryValueShadowValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryValueSizeValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryValueSizeValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryValueValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryValueValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryValueWeightValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryValueWeightValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryVariableFamilyNameValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryVariableFamilyNameValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryVariableImageValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryVariableImageValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryVariableLengthValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryVariableLengthValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryVariablePositionValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryVariablePositionValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryVariableShadowValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryVariableShadowValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryVariableSizeValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryVariableSizeValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryVariableValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryVariableValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ArbitraryVariableWeightValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ArbitraryVariableWeightValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\FractionValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/FractionValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\IntegerValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/IntegerValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\LengthValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/LengthValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\NumberValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/NumberValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\PercentValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/PercentValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\TshirtSizeValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/TshirtSizeValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ValidateArbitraryVariable' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ValidateArbitraryVariable.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ValidatesArbitraryValue' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ValidatesArbitraryValue.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\ValidatorInterface' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/ValidatorInterface.php',
+        'TalesFromADev\\TailwindMerge\\ValueObjects\\ClassPartObject' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/ValueObjects/ClassPartObject.php',
+        'TalesFromADev\\TailwindMerge\\ValueObjects\\ClassValidatorObject' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/ValueObjects/ClassValidatorObject.php',
+        'TalesFromADev\\TailwindMerge\\ValueObjects\\ParsedClassName' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/ValueObjects/ParsedClassName.php',
+        'TalesFromADev\\TailwindMerge\\ValueObjects\\ThemeGetter' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/ValueObjects/ThemeGetter.php',
         'tobimori\\KirbyCacheAdapter' => __DIR__ . '/../..' . '/classes/KirbyCacheAdapter.php',
         'tobimori\\TwMerge' => __DIR__ . '/../..' . '/classes/TwMerge.php',
     );

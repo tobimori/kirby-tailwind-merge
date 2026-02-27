@@ -7,7 +7,12 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'tobimori\\' => array($baseDir . '/classes'),
-    'TailwindMerge\\' => array($vendorDir . '/gehrisandro/tailwind-merge-php/src'),
+    'TalesFromADev\\TailwindMerge\\' => array($vendorDir . '/tales-from-a-dev/tailwind-merge-php/src'),
+    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'Symfony\\Polyfill\\Intl\\Normalizer\\' => array($vendorDir . '/symfony/polyfill-intl-normalizer'),
+    'Symfony\\Polyfill\\Intl\\Grapheme\\' => array($vendorDir . '/symfony/polyfill-intl-grapheme'),
+    'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
+    'Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
     'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
     'Kirby\\' => array($vendorDir . '/getkirby/composer-installer/src'),
 );

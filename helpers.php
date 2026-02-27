@@ -34,13 +34,3 @@ if (!function_exists('cls')) {
     return TwMerge::cls($classes);
   }
 }
-
-if (!function_exists('mod')) {
-  /**
-   * Modifies all classes with the given modifier and intelligently merges classes with Tailwind Merge.
-   */
-  function mod(string $modifier, string $classes): string
-  {
-    return TwMerge::modify($modifier, $classes);
-  }
-}
