@@ -4,100 +4,135 @@ declare(strict_types=1);
 
 namespace TalesFromADev\TailwindMerge\Support;
 
-use TalesFromADev\TailwindMerge\Helper\Collection;
-use TalesFromADev\TailwindMerge\ValueObjects\ClassPartObject;
-use TalesFromADev\TailwindMerge\ValueObjects\ClassValidatorObject;
-
-use function Symfony\Component\String\u;
-
 /**
  * @internal
+ *
+ * @phpstan-import-type CompiledClassMap from ClassMapCompiler
  */
 final class ClassGroupUtils
 {
-    private const CLASS_PART_SEPARATOR = '-';
-
-    // I use two dots here because one dot is used as prefix for class groups in plugins
+    // Two dots, because plugins use one as their class group prefix.
     private const ARBITRARY_PROPERTY_PREFIX = 'arbitrary..';
 
-    private ClassMap $classMap;
+    /**
+     * Bounds the memo for long-running workers merging generated class names.
+     */
+    private const CLASS_GROUP_ID_CACHE_LIMIT = 5000;
+
+    /**
+     * @var CompiledClassMap|null
+     */
+    private ?array $compiledClassMap = null;
+
+    /**
+     * @var array<string, ?string>
+     */
+    private array $classGroupIdCache = [];
+
+    /**
+     * Rotated out of the memo, with the same admission rule as ClassListMerger.
+     *
+     * @var array<string, ?string>
+     */
+    private array $previousClassGroupIdCache = [];
+
+    private int $missesSinceFull = 0;
 
     /**
      * @param array<string, list<mixed>>        $theme
      * @param array<string, list<mixed>>        $classGroups
      * @param array<string, array<int, string>> $conflictingClassGroups
      * @param array<string, array<int, string>> $conflictingClassGroupModifiers
+     * @param bool                              $useDefaultClassMap             Only when `theme` and `classGroups` are the defaults
      */
     public function __construct(
         private readonly array $theme,
         private readonly array $classGroups,
         private readonly array $conflictingClassGroups,
         private readonly array $conflictingClassGroupModifiers,
+        bool $useDefaultClassMap = false,
     ) {
-        $this->classMap = new ClassMap();
+        if ($useDefaultClassMap) {
+            // Constant arrays: opcache serves them from shared memory, nothing is built.
+            $this->compiledClassMap = ['literals' => DefaultClassMap::LITERALS, 'validators' => DefaultClassMap::VALIDATORS];
+        }
     }
 
     public function getClassGroupId(string $class): ?string
+    {
+        // array_key_exists, not isset: null ("no class group") is cached too.
+        if (\array_key_exists($class, $this->classGroupIdCache)) {
+            return $this->classGroupIdCache[$class];
+        }
+
+        $classGroupId = \array_key_exists($class, $this->previousClassGroupIdCache)
+            ? $this->previousClassGroupIdCache[$class]
+            : $this->resolveClassGroupId($class);
+
+        if (\count($this->classGroupIdCache) < self::CLASS_GROUP_ID_CACHE_LIMIT) {
+            $this->classGroupIdCache[$class] = $classGroupId;
+        } elseif (++$this->missesSinceFull >= self::CLASS_GROUP_ID_CACHE_LIMIT) {
+            $this->previousClassGroupIdCache = $this->classGroupIdCache;
+            $this->classGroupIdCache = [$class => $classGroupId];
+            $this->missesSinceFull = 0;
+        }
+
+        return $classGroupId;
+    }
+
+    private function resolveClassGroupId(string $class): ?string
     {
         if (str_starts_with($class, '[') && str_ends_with($class, ']')) {
             return $this->getGroupIdForArbitraryProperty($class);
         }
 
-        $classParts = explode(self::CLASS_PART_SEPARATOR, $class);
-        // Classes like `-inset-1` produce an empty string as first classPart. We assume that classes for negative values are used correctly and skip it.
-        $startIndex = '' === $classParts[0] && \count($classParts) > 1 ? 1 : 0;
-        $classPartObject = $this->classMap->processClassGroup($this->classGroups, $this->theme);
+        // Negative values like `-inset-1` start with an empty part.
+        if (str_starts_with($class, ClassMap::CLASS_PART_SEPARATOR)) {
+            $class = substr($class, 1);
+        }
 
-        return $this->getGroupRecursive($classParts, $startIndex, $classPartObject);
+        $compiledClassMap = $this->compiledClassMap ??= ClassMapCompiler::compile($this->classGroups, $this->theme);
+
+        if (isset($compiledClassMap['literals'][$class])) {
+            return $compiledClassMap['literals'][$class];
+        }
+
+        // Validators of the deepest matching trie node first, as upstream's walk.
+        $separatorPositions = [];
+        for ($position = strpos($class, ClassMap::CLASS_PART_SEPARATOR); false !== $position; $position = strpos($class, ClassMap::CLASS_PART_SEPARATOR, $position + 1)) {
+            $separatorPositions[] = $position;
+        }
+
+        for ($index = \count($separatorPositions) - 1; $index >= -1; --$index) {
+            $restStart = $index >= 0 ? $separatorPositions[$index] + 1 : 0;
+            $validators = $compiledClassMap['validators'][substr($class, 0, $restStart)] ?? null;
+
+            if (null === $validators) {
+                continue;
+            }
+
+            $classRest = substr($class, $restStart);
+
+            foreach ($validators as [$validator, $classGroupId]) {
+                if (\is_string($validator) ? $validator::validate($classRest) : $validator($classRest)) {
+                    return $classGroupId;
+                }
+            }
+        }
+
+        return null;
     }
 
-    /**
-     * @param array<array-key, string> $classParts
-     */
-    public function getGroupRecursive(array $classParts, int $startIndex, ClassPartObject $classPartObject): ?string
+    private function getGroupIdForArbitraryProperty(string $className): ?string
     {
-        $classPathsLength = \count($classParts) - $startIndex;
+        $content = substr($className, 1, -1);
+        $colonIndex = strpos($content, ':');
 
-        if (0 === $classPathsLength) {
-            return $classPartObject->classGroupId;
-        }
-
-        $currentClassPart = $classParts[$startIndex] ?? null;
-        $nextClassPartObject = $classPartObject->nextPart[$currentClassPart] ?? null;
-
-        $classGroupFromNextClassPart = null !== $nextClassPartObject
-            ? $this->getGroupRecursive($classParts, $startIndex + 1, $nextClassPartObject)
-            : null
-        ;
-
-        if ($classGroupFromNextClassPart) {
-            return $classGroupFromNextClassPart;
-        }
-
-        if ([] === $classPartObject->validators) {
+        if (false === $colonIndex) {
             return null;
         }
 
-        $classRest = 0 === $startIndex
-            ? implode(self::CLASS_PART_SEPARATOR, $classParts)
-            : implode(self::CLASS_PART_SEPARATOR, \array_slice($classParts, $startIndex))
-        ;
-
-        return Collection::make($classPartObject->validators)->first(static fn (ClassValidatorObject $validator) => ($validator->validator)($classRest))?->classGroupId;
-    }
-
-    /**
-     * Get the class group ID for an arbitrary property.
-     */
-    public function getGroupIdForArbitraryProperty(string $className): ?string
-    {
-        if (-1 === u($className)->slice(1, -1)->indexOf(':')) {
-            return null;
-        }
-
-        $content = u($className)->slice(1, -1);
-        $colonIndex = $content->indexOf(':');
-        $property = $content->slice(0, $colonIndex)->toString();
+        $property = substr($content, 0, $colonIndex);
 
         if ('' !== $property && '0' !== $property) {
             return self::ARBITRARY_PROPERTY_PREFIX.$property;

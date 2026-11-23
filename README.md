@@ -10,6 +10,8 @@ This plugin relies on [tailwind-merge-php by Tales from a Dev](https://github.co
 
 ## Installation
 
+Requires Kirby 4, 5 or 6 and PHP 8.3 or later.
+
 ```
 composer require tobimori/kirby-tailwind-merge
 ```

@@ -31,10 +31,10 @@ final class ClassMap
     }
 
     /**
-     * @param list<mixed>                $classGroup
+     * @param array<array-key, mixed>    $classGroup
      * @param array<string, list<mixed>> $theme
      */
-    public function processClassesRecursively(array $classGroup, ClassPartObject $classPartObject, string $classGroupId, array $theme): void
+    private function processClassesRecursively(array $classGroup, ClassPartObject $classPartObject, string $classGroupId, array $theme): void
     {
         foreach ($classGroup as $classDefinition) {
             $this->processClassDefinition($classDefinition, $classPartObject, $classGroupId, $theme);
@@ -44,7 +44,7 @@ final class ClassMap
     /**
      * @param array<string, list<mixed>> $theme
      */
-    public function processClassDefinition(string|array|callable|ThemeGetter $classDefinition, ClassPartObject $classPartObject, string $classGroupId, array $theme): void
+    private function processClassDefinition(mixed $classDefinition, ClassPartObject $classPartObject, string $classGroupId, array $theme): void
     {
         if (\is_string($classDefinition)) {
             $this->processStringDefinition($classDefinition, $classPartObject, $classGroupId);
@@ -64,40 +64,46 @@ final class ClassMap
             return;
         }
 
-        $this->processObjectDefinition($classDefinition, $classPartObject, $classGroupId, $theme);
+        if (\is_array($classDefinition)) {
+            $this->processObjectDefinition($classDefinition, $classPartObject, $classGroupId, $theme);
+        }
     }
 
-    public function processStringDefinition(string $classDefinition, ClassPartObject $classPartObject, string $classGroupId): void
+    private function processStringDefinition(string $classDefinition, ClassPartObject $classPartObject, string $classGroupId): void
     {
         $classPartObjectToEdit = '' === $classDefinition ? $classPartObject : $this->getPart($classPartObject, $classDefinition);
         $classPartObjectToEdit->classGroupId = $classGroupId;
     }
 
-    public function processFunctionDefinition(callable $classDefinition, ClassPartObject $classPartObject, string $classGroupId): void
+    private function processFunctionDefinition(callable $classDefinition, ClassPartObject $classPartObject, string $classGroupId): void
     {
         $classPartObject->validators[] = new ClassValidatorObject(
             classGroupId: $classGroupId,
-            validator: $classDefinition,
+            validator: $classDefinition(...),
         );
     }
 
     /**
-     * @param array<string, list<mixed>> $classDefinition
+     * @param array<array-key, mixed>    $classDefinition
      * @param array<string, list<mixed>> $theme
      */
-    public function processObjectDefinition(array $classDefinition, ClassPartObject $classPartObject, string $classGroupId, array $theme): void
+    private function processObjectDefinition(array $classDefinition, ClassPartObject $classPartObject, string $classGroupId, array $theme): void
     {
         foreach ($classDefinition as $key => $classGroup) {
+            if (!\is_string($key) || !\is_array($classGroup)) {
+                continue;
+            }
+
             $this->processClassesRecursively(
                 $classGroup,
-                self::getPart($classPartObject, $key),
+                $this->getPart($classPartObject, $key),
                 $classGroupId,
                 $theme,
             );
         }
     }
 
-    public function getPart(ClassPartObject $classPartObject, string $path): ClassPartObject
+    private function getPart(ClassPartObject $classPartObject, string $path): ClassPartObject
     {
         $currentClassPartObject = $classPartObject;
 

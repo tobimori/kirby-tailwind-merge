@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace TalesFromADev\TailwindMerge\ValueObjects;
 
-class ParsedClassName
+/**
+ * @internal
+ */
+final class ParsedClassName
 {
     /**
      * @param array<array-key, string> $modifiers
      */
     public function __construct(
-        public array $modifiers,
-        public bool $hasImportantModifier,
-        public string $baseClassName,
-        public ?int $maybePostfixModifierPosition,
-        public bool $isExternal = false,
+        public readonly array $modifiers,
+        public readonly bool $hasImportantModifier,
+        public readonly string $baseClassName,
+        public readonly ?int $maybePostfixModifierPosition,
+        public readonly bool $isExternal = false,
     ) {
     }
 }

@@ -4,12 +4,23 @@ declare(strict_types=1);
 
 namespace TalesFromADev\TailwindMerge\Validators;
 
-use function Symfony\Component\String\u;
-
+/**
+ * @internal
+ */
 final class AnyNonArbitraryValidator implements ValidatorInterface
 {
     public static function validate(string $value): bool
     {
-        return [] === u($value)->match(self::ARBITRARY_VALUE_REGEX) && [] === u($value)->match(self::ARBITRARY_VARIABLE_REGEX);
+        $firstCharacter = $value[0] ?? '';
+
+        if ('[' === $firstCharacter) {
+            return 1 !== preg_match(self::ARBITRARY_VALUE_REGEX, $value);
+        }
+
+        if ('(' === $firstCharacter) {
+            return 1 !== preg_match(self::ARBITRARY_VARIABLE_REGEX, $value);
+        }
+
+        return true;
     }
 }

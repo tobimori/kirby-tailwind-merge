@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace TalesFromADev\TailwindMerge\Validators;
 
-use function Symfony\Component\String\u;
-
+/**
+ * @internal
+ */
 trait ValidateArbitraryVariable
 {
     /**
@@ -13,18 +14,19 @@ trait ValidateArbitraryVariable
      */
     protected static function getIsArbitraryVariable(string $value, string|array $labels, bool $shouldMatchNoLabel = false): bool
     {
-        $labels = \is_string($labels) ? [$labels] : $labels;
-
-        $matches = u($value)->match(self::ARBITRARY_VARIABLE_REGEX);
-
-        if ([] !== $matches) {
-            if ('' !== $matches[1] && '0' !== $matches[1] && null !== $matches[1]) {
-                return \in_array($matches[1], $labels);
-            }
-
-            return $shouldMatchNoLabel;
+        if ('(' !== ($value[0] ?? '')) {
+            return false;
         }
 
-        return false;
+        if (1 !== preg_match(self::ARBITRARY_VARIABLE_REGEX, $value, $matches, \PREG_UNMATCHED_AS_NULL)) {
+            return false;
+        }
+
+        // See ValidatesArbitraryValue.
+        if (null !== $matches[1]) {
+            return \in_array($matches[1], \is_string($labels) ? [$labels] : $labels);
+        }
+
+        return $shouldMatchNoLabel;
     }
 }

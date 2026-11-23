@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace TalesFromADev\TailwindMerge\ValueObjects;
 
+/**
+ * @internal
+ */
 final class ThemeGetter
 {
     public function __construct(
-        public string $key,
+        public readonly string $key,
     ) {
     }
 

@@ -1,7 +1,7 @@
 {
 	"name": "tobimori/kirby-tailwind-merge",
 	"description": "Tailwind Merge for Kirby CMS",
-	"version": "4.0.0",
+	"version": "4.1.0",
 	"type": "kirby-plugin",
 	"keywords": [
 		"kirby",
@@ -18,16 +18,19 @@
 	"require": {
 		"php": ">=8.3.0",
 		"getkirby/composer-installer": "^1.2",
-		"tales-from-a-dev/tailwind-merge-php": "^0.1"
+		"tales-from-a-dev/tailwind-merge-php": "^0.5"
 	},
 	"require-dev": {
-		"getkirby/cms": "^4.0 || ^5.0"
+		"getkirby/cms": "^4.0 || ^5.0 || ^6.0@RC"
 	},
 	"scripts": {
 		"dist": "composer install --no-dev --optimize-autoloader"
 	},
 	"config": {
 		"optimize-autoloader": true,
+		"platform": {
+			"php": "8.3.0"
+		},
 		"allow-plugins": {
 			"getkirby/composer-installer": true
 		}
@@ -39,5 +42,10 @@
 		"files": [
 			"helpers.php"
 		]
+	},
+	"extra": {
+		"kirby": {
+			"compatible": "^4.0 || ^5.0 || ^6.0"
+		}
 	}
 }

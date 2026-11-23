@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace TalesFromADev\TailwindMerge\Validators;
 
-use function Symfony\Component\String\u;
-
 /**
  * @internal
  */
@@ -20,6 +18,6 @@ final class ArbitraryValueImageValidator implements ValidatorInterface
 
     private static function isImage(string $value): bool
     {
-        return [] !== u($value)->match(self::IMAGE_REGEX);
+        return 1 === preg_match(self::IMAGE_REGEX, $value);
     }
 }

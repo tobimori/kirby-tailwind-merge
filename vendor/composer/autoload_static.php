@@ -4,14 +4,9 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843
+class ComposerStaticInit88ecb14a952bc0bbb6c39fa3f67db2bf
 {
     public static $files = array (
-        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
-        '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
-        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
-        'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'b896c44c77881af352801464aacb9c14' => __DIR__ . '/../..' . '/helpers.php',
     );
 
@@ -23,14 +18,6 @@ class ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843
         'T' =>
         array (
             'TalesFromADev\\TailwindMerge\\' => 28,
-        ),
-        'S' =>
-        array (
-            'Symfony\\Polyfill\\Mbstring\\' => 26,
-            'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
-            'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
-            'Symfony\\Polyfill\\Ctype\\' => 23,
-            'Symfony\\Component\\String\\' => 25,
         ),
         'P' =>
         array (
@@ -51,26 +38,6 @@ class ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843
         array (
             0 => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src',
         ),
-        'Symfony\\Polyfill\\Mbstring\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
-        ),
-        'Symfony\\Polyfill\\Intl\\Normalizer\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
-        ),
-        'Symfony\\Polyfill\\Intl\\Grapheme\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme',
-        ),
-        'Symfony\\Polyfill\\Ctype\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
-        ),
-        'Symfony\\Component\\String\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/symfony/string',
-        ),
         'Psr\\SimpleCache\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
@@ -87,37 +54,17 @@ class ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843
         'Kirby\\ComposerInstaller\\Installer' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Installer.php',
         'Kirby\\ComposerInstaller\\Plugin' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/Plugin.php',
         'Kirby\\ComposerInstaller\\PluginInstaller' => __DIR__ . '/..' . '/getkirby/composer-installer/src/ComposerInstaller/PluginInstaller.php',
-        'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'Psr\\SimpleCache\\CacheException' => __DIR__ . '/..' . '/psr/simple-cache/src/CacheException.php',
         'Psr\\SimpleCache\\CacheInterface' => __DIR__ . '/..' . '/psr/simple-cache/src/CacheInterface.php',
         'Psr\\SimpleCache\\InvalidArgumentException' => __DIR__ . '/..' . '/psr/simple-cache/src/InvalidArgumentException.php',
-        'Symfony\\Component\\String\\AbstractString' => __DIR__ . '/..' . '/symfony/string/AbstractString.php',
-        'Symfony\\Component\\String\\AbstractUnicodeString' => __DIR__ . '/..' . '/symfony/string/AbstractUnicodeString.php',
-        'Symfony\\Component\\String\\ByteString' => __DIR__ . '/..' . '/symfony/string/ByteString.php',
-        'Symfony\\Component\\String\\CodePointString' => __DIR__ . '/..' . '/symfony/string/CodePointString.php',
-        'Symfony\\Component\\String\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/string/Exception/ExceptionInterface.php',
-        'Symfony\\Component\\String\\Exception\\InvalidArgumentException' => __DIR__ . '/..' . '/symfony/string/Exception/InvalidArgumentException.php',
-        'Symfony\\Component\\String\\Exception\\RuntimeException' => __DIR__ . '/..' . '/symfony/string/Exception/RuntimeException.php',
-        'Symfony\\Component\\String\\Inflector\\EnglishInflector' => __DIR__ . '/..' . '/symfony/string/Inflector/EnglishInflector.php',
-        'Symfony\\Component\\String\\Inflector\\FrenchInflector' => __DIR__ . '/..' . '/symfony/string/Inflector/FrenchInflector.php',
-        'Symfony\\Component\\String\\Inflector\\InflectorInterface' => __DIR__ . '/..' . '/symfony/string/Inflector/InflectorInterface.php',
-        'Symfony\\Component\\String\\Inflector\\SpanishInflector' => __DIR__ . '/..' . '/symfony/string/Inflector/SpanishInflector.php',
-        'Symfony\\Component\\String\\LazyString' => __DIR__ . '/..' . '/symfony/string/LazyString.php',
-        'Symfony\\Component\\String\\Slugger\\AsciiSlugger' => __DIR__ . '/..' . '/symfony/string/Slugger/AsciiSlugger.php',
-        'Symfony\\Component\\String\\Slugger\\SluggerInterface' => __DIR__ . '/..' . '/symfony/string/Slugger/SluggerInterface.php',
-        'Symfony\\Component\\String\\TruncateMode' => __DIR__ . '/..' . '/symfony/string/TruncateMode.php',
-        'Symfony\\Component\\String\\UnicodeString' => __DIR__ . '/..' . '/symfony/string/UnicodeString.php',
-        'Symfony\\Polyfill\\Ctype\\Ctype' => __DIR__ . '/..' . '/symfony/polyfill-ctype/Ctype.php',
-        'Symfony\\Polyfill\\Intl\\Grapheme\\Grapheme' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/Grapheme.php',
-        'Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Normalizer.php',
-        'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
-        'TalesFromADev\\TailwindMerge\\Helper\\Arr' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Helper/Arr.php',
-        'TalesFromADev\\TailwindMerge\\Helper\\Collection' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Helper/Collection.php',
         'TalesFromADev\\TailwindMerge\\Support\\ClassGroupUtils' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/ClassGroupUtils.php',
         'TalesFromADev\\TailwindMerge\\Support\\ClassListMerger' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/ClassListMerger.php',
         'TalesFromADev\\TailwindMerge\\Support\\ClassMap' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/ClassMap.php',
+        'TalesFromADev\\TailwindMerge\\Support\\ClassMapCompiler' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/ClassMapCompiler.php',
         'TalesFromADev\\TailwindMerge\\Support\\ClassNameParser' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/ClassNameParser.php',
         'TalesFromADev\\TailwindMerge\\Support\\Config' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/Config.php',
+        'TalesFromADev\\TailwindMerge\\Support\\DefaultClassMap' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/DefaultClassMap.php',
+        'TalesFromADev\\TailwindMerge\\Support\\LruCache' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/LruCache.php',
         'TalesFromADev\\TailwindMerge\\Support\\SortModifiers' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Support/SortModifiers.php',
         'TalesFromADev\\TailwindMerge\\TailwindMerge' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/TailwindMerge.php',
         'TalesFromADev\\TailwindMerge\\TailwindMergeInterface' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/TailwindMergeInterface.php',
@@ -143,6 +90,7 @@ class ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843
         'TalesFromADev\\TailwindMerge\\Validators\\FractionValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/FractionValidator.php',
         'TalesFromADev\\TailwindMerge\\Validators\\IntegerValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/IntegerValidator.php',
         'TalesFromADev\\TailwindMerge\\Validators\\LengthValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/LengthValidator.php',
+        'TalesFromADev\\TailwindMerge\\Validators\\NamedContainerQueryValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/NamedContainerQueryValidator.php',
         'TalesFromADev\\TailwindMerge\\Validators\\NumberValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/NumberValidator.php',
         'TalesFromADev\\TailwindMerge\\Validators\\PercentValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/PercentValidator.php',
         'TalesFromADev\\TailwindMerge\\Validators\\TshirtSizeValidator' => __DIR__ . '/..' . '/tales-from-a-dev/tailwind-merge-php/src/Validators/TshirtSizeValidator.php',
@@ -160,9 +108,9 @@ class ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit123f65cc68c0e5e85ce76d8ba69d9843::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit88ecb14a952bc0bbb6c39fa3f67db2bf::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit88ecb14a952bc0bbb6c39fa3f67db2bf::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit88ecb14a952bc0bbb6c39fa3f67db2bf::$classMap;
 
         }, null, ClassLoader::class);
     }

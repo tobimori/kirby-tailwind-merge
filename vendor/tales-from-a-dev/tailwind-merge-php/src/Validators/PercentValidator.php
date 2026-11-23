@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace TalesFromADev\TailwindMerge\Validators;
 
-use function Symfony\Component\String\u;
-
 /**
  * @internal
  */
@@ -17,6 +15,6 @@ final class PercentValidator implements ValidatorInterface
             return false;
         }
 
-        return NumberValidator::validate(u($value)->slice(0, -1)->toString());
+        return NumberValidator::validate(substr($value, 0, -1));
     }
 }

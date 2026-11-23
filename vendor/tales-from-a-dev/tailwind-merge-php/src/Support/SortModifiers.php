@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace TalesFromADev\TailwindMerge\Support;
 
-use TalesFromADev\TailwindMerge\Helper\Collection;
-
 /**
  * @internal
  */
@@ -33,22 +31,25 @@ final class SortModifiers
      */
     public function sort(array $modifiers): array
     {
-        $sortedModifiers = Collection::make();
-        $unsortedModifiers = Collection::make();
+        $sortedModifiers = [];
+        $unsortedModifiers = [];
 
         foreach ($modifiers as $modifier) {
             $isPositionSensitive = '[' === $modifier[0] || isset($this->modifierWeights[$modifier]);
 
             if ($isPositionSensitive) {
-                $sortedModifiers = $sortedModifiers->concat([...$unsortedModifiers->sort()->all(), $modifier]);
-                $unsortedModifiers = Collection::make();
+                sort($unsortedModifiers);
+                array_push($sortedModifiers, ...$unsortedModifiers);
+
+                $sortedModifiers[] = $modifier;
+                $unsortedModifiers = [];
             } else {
-                $unsortedModifiers->add($modifier);
+                $unsortedModifiers[] = $modifier;
             }
         }
 
-        $sortedModifiers = $sortedModifiers->concat($unsortedModifiers->sort());
+        sort($unsortedModifiers);
 
-        return $sortedModifiers->all();
+        return [...$sortedModifiers, ...$unsortedModifiers];
     }
 }

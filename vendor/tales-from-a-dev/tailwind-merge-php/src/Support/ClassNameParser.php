@@ -17,6 +17,8 @@ final class ClassNameParser
 
     public const EMPTY_MODIFIERS = [];
 
+    private const SIGNIFICANT_CHARACTERS = ':/[]()';
+
     public function __construct(
         private readonly ?string $prefix = null,
     ) {
@@ -24,7 +26,7 @@ final class ClassNameParser
 
     public function parse(string $className): ParsedClassName
     {
-        if ($this->prefix) {
+        if (null !== $this->prefix && '' !== $this->prefix) {
             $fullPrefix = $this->prefix.self::MODIFIER_SEPARATOR;
 
             if (!str_starts_with($className, $fullPrefix)) {
@@ -47,7 +49,9 @@ final class ClassNameParser
         $modifierStart = 0;
         $postfixModifierPosition = null;
 
-        for ($index = 0; $index < \strlen($className); ++$index) {
+        $length = \strlen($className);
+
+        for ($index = strcspn($className, self::SIGNIFICANT_CHARACTERS); $index < $length; $index += 1 + strcspn($className, self::SIGNIFICANT_CHARACTERS, $index + 1)) {
             $currentCharacter = $className[$index];
 
             if (0 === $bracketDepth && 0 === $parentDepth) {
@@ -77,11 +81,24 @@ final class ClassNameParser
         }
 
         $baseClassNameWithImportantModifier = [] === $modifiers ? $className : substr($className, $modifierStart);
-        $baseClassName = $this->stripImportantModifier($baseClassNameWithImportantModifier);
-        $hasImportantModifier = $baseClassName !== $baseClassNameWithImportantModifier;
 
+        // The trailing `!` wins over the legacy leading one: `!p-2!` strips only the suffix.
+        $hasTrailingImportantModifier = str_ends_with($baseClassNameWithImportantModifier, self::IMPORTANT_MODIFIER);
+        $hasLeadingImportantModifier = !$hasTrailingImportantModifier && str_starts_with($baseClassNameWithImportantModifier, self::IMPORTANT_MODIFIER);
+
+        if ($hasTrailingImportantModifier) {
+            $baseClassName = substr($baseClassNameWithImportantModifier, 0, -1);
+        } elseif ($hasLeadingImportantModifier) {
+            $baseClassName = substr($baseClassNameWithImportantModifier, 1);
+        } else {
+            $baseClassName = $baseClassNameWithImportantModifier;
+        }
+
+        $hasImportantModifier = $hasTrailingImportantModifier || $hasLeadingImportantModifier;
+
+        // Stripping a leading `!` shifts the postfix offset left by one.
         $maybePostfixModifierPosition = $postfixModifierPosition && $postfixModifierPosition > $modifierStart
-            ? $postfixModifierPosition - $modifierStart
+            ? $postfixModifierPosition - $modifierStart - ($hasLeadingImportantModifier ? 1 : 0)
             : null
         ;
 
@@ -91,19 +108,5 @@ final class ClassNameParser
             baseClassName: $baseClassName,
             maybePostfixModifierPosition: $maybePostfixModifierPosition,
         );
-    }
-
-    private function stripImportantModifier(string $baseClassName): string
-    {
-        if (str_ends_with($baseClassName, self::IMPORTANT_MODIFIER)) {
-            return substr($baseClassName, 0, -1);
-        }
-
-        // Legacy: important modifier at the start
-        if (str_starts_with($baseClassName, self::IMPORTANT_MODIFIER)) {
-            return substr($baseClassName, 1);
-        }
-
-        return $baseClassName;
     }
 }
